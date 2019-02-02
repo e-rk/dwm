@@ -66,6 +66,10 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *suspcmd[]  = { "systemctl", "suspend", NULL};
+static const char *mpcprev[]  = { "mpc", "prev", NULL};
+static const char *mpcnext[]  = { "mpc", "next", NULL};
+static const char *mpctogg[]  = { "mpc", "toggle", NULL};
+static const char *mpcdel[]   = { "mpc", "del 0", NULL};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -103,6 +107,10 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
     { MODKEY|ShiftMask,             XK_s,      spawn,          {.v = suspcmd } },
+    { MODKEY,                       XK_bracketleft, spawn,     {.v = mpcprev } },
+    { MODKEY,                       XK_bracketright, spawn,    {.v = mpcnext } },
+    { MODKEY,                       XK_backslash,    spawn,    {.v = mpctogg } },
+    { MODKEY,                       XK_slash,        spawn,    {.v = mpcdel  } },
 };
 
 /* button definitions */
