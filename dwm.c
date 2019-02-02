@@ -208,6 +208,7 @@ static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
+static void prompt(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
@@ -1659,6 +1660,44 @@ spawn(const Arg *arg)
 		perror(" failed");
 		exit(EXIT_SUCCESS);
 	}
+}
+
+void prompt(const Arg *arg)
+{
+    const char *config_home = getenv("XDG_CONFIG_HOME");
+    const char *user_home   = getenv("HOME");
+    char       *file        = malloc(PATH_MAX);
+    
+    if (file == NULL)
+    {
+        perror(" insufficient memory");
+        return;
+    }
+
+    if (user_home == NULL || strlen(user_home) == 0) {
+        perror(" environment error");
+        return;
+    }
+
+    if (config_home == NULL || strlen(config_home) == 0) {
+        snprintf(file, PATH_MAX, "%s/.config/%s", user_home, prompt_file);
+    }
+    else if (config_home[0] == '/') {
+        snprintf(file, PATH_MAX, "%s/%s", config_home, prompt_file);
+    }
+
+	if (fork() == 0) {
+		if (dpy)
+			close(ConnectionNumber(dpy));
+		setsid();
+		execvp(file, (char **)arg->v);
+		fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[0]);
+		perror(" failed");
+		exit(EXIT_SUCCESS);
+	}
+
+    if (file != NULL)
+        free(file);
 }
 
 void
