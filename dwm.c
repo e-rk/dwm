@@ -1664,27 +1664,27 @@ spawn(const Arg *arg)
 
 void prompt(const Arg *arg)
 {
-    const char *config_home = getenv("XDG_CONFIG_HOME");
-    const char *user_home   = getenv("HOME");
-    char       *file        = malloc(PATH_MAX);
-    
-    if (file == NULL)
-    {
-        perror(" insufficient memory");
-        return;
-    }
+	const char *config_home = getenv("XDG_CONFIG_HOME");
+	const char *user_home   = getenv("HOME");
+	char       *file        = malloc(PATH_MAX);
 
-    if (user_home == NULL || strlen(user_home) == 0) {
-        perror(" environment error");
-        return;
-    }
+	if (file == NULL)
+	{
+		perror(" insufficient memory");
+		return;
+	}
 
-    if (config_home == NULL || strlen(config_home) == 0) {
-        snprintf(file, PATH_MAX, "%s/.config/%s", user_home, prompt_file);
-    }
-    else if (config_home[0] == '/') {
-        snprintf(file, PATH_MAX, "%s/%s", config_home, prompt_file);
-    }
+	if (user_home == NULL || strlen(user_home) == 0) {
+		perror(" environment error");
+		return;
+	}
+
+	if (config_home == NULL || strlen(config_home) == 0) {
+		snprintf(file, PATH_MAX, "%s/.config/%s", user_home, prompt_file);
+	}
+	else if (config_home[0] == '/') {
+		snprintf(file, PATH_MAX, "%s/%s", config_home, prompt_file);
+	}
 
 	if (fork() == 0) {
 		if (dpy)
@@ -1696,8 +1696,8 @@ void prompt(const Arg *arg)
 		exit(EXIT_SUCCESS);
 	}
 
-    if (file != NULL)
-        free(file);
+	if (file != NULL)
+		free(file);
 }
 
 void
